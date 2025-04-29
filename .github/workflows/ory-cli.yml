@@ -1,0 +1,22 @@
+name: Update Ory Network Config
+
+env:
+  ORY_PROJECT_ID: "6c030e22-80a2-4d4f-83a8-275cecd288e0"
+  ORY_WORKSPACE_ID: "319d7faa-2576-417a-8806-c2afb42a4993"
+  ORY_WORKSPACE_API_KEY: ${{ secrets.ORY_WORKSPACE_API_KEY }}
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  run-ory-cli:
+    runs-on: ubuntu-latest
+    container:
+      image: oryd/ory:v1
+      options: --user root
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Push changes to Ory Network
+        run: ory update identity-config --file identity-config.json --project ${{ env.ORY_PROJECT_ID }}
